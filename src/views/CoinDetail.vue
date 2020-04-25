@@ -1,9 +1,9 @@
 <template>
   <div class="flex-col">
     <div class="flex justify-center">
-        <bounce-loader :loading="isLoading" :color="'#68d391'" :size="100" />
+      <bounce-loader :loading="isLoading" :color="'#68d391'" :size="100" />
     </div>
-    
+
     <template v-if="asset.id && !isLoading">
       <div class="flex flex-col sm:flex-row justify-around items-center">
         <div class="flex flex-col items-center">
@@ -50,12 +50,11 @@
         </div>
 
         <div class="my-10 sm:mt-0 flex flex-col justify-center text-center">
-          <button @click="toggleConverter"
+          <button
+            @click="toggleConverter"
             class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
           >
-            {{
-              fromUsd ? `USD a ${asset.symbol}`:`${asset.symbol} a USD`
-            }}
+            {{ fromUsd ? `USD a ${asset.symbol}` : `${asset.symbol} a USD` }}
           </button>
 
           <div class="flex flex-row my-5">
@@ -65,25 +64,32 @@
                 id="convertValue"
                 type="number"
                 class="text-center bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal"
-                :placeholder="`Valor en ${fromUsd ? 'USD': asset.sybol}`"
+                :placeholder="`Valor en ${fromUsd ? 'USD' : asset.sybol}`"
               />
             </label>
           </div>
 
-          <span class="text-xl">{{ convertResult }} {{ fromUsd ? asset.symbol : 'USD' }}</span>
+          <span class="text-xl"
+            >{{ convertResult }} {{ fromUsd ? asset.symbol : "USD" }}</span
+          >
         </div>
       </div>
 
-      <line-chart class="my-10" 
-      :colors="['orange']"
-      :min="min"
-      :max="max"
-      :data="history.map(h => [h.date, parseFloat(h.priceUsd).toFixed(2)])"
+      <line-chart
+        class="my-10"
+        :colors="['orange']"
+        :min="min"
+        :max="max"
+        :data="history.map(h => [h.date, parseFloat(h.priceUsd).toFixed(2)])"
       ></line-chart>
 
       <h3 class="text-xl my-10">Mejores Ofertas de Cambio</h3>
       <table>
-        <tr v-for="m in markets" :key="`${m.exchangeId}-${m.priceUsd}`" class="border-b">
+        <tr
+          v-for="m in markets"
+          :key="`${m.exchangeId}-${m.priceUsd}`"
+          class="border-b"
+        >
           <td>
             <b>{{ m.exchangeId }}</b>
           </td>
@@ -98,7 +104,9 @@
               <slot>Obtener Link</slot>
             </btaj-button>
 
-            <a v-else class="hover:underline text-green-600" target="_blanck">{{ m.url }}</a>
+            <a v-else class="hover:underline text-green-600" target="_blanck">{{
+              m.url
+            }}</a>
           </td>
         </tr>
       </table>
@@ -123,16 +131,18 @@ export default {
     };
   },
   watch: {
-    $route(){
+    $route() {
       this.getCoin();
     }
   },
   computed: {
     convertResult() {
-      if(!this.convertValue){
+      if (!this.convertValue) {
         return 0;
       }
-      const result =  this.fromUsd ? this.convertValue / this.asset.priceUsd : this.convertValue * this.asset.priceUsd;    
+      const result = this.fromUsd
+        ? this.convertValue / this.asset.priceUsd
+        : this.convertValue * this.asset.priceUsd;
       return result.toFixed(2);
     },
     min() {
@@ -152,7 +162,6 @@ export default {
         ...this.history.map(h => parseFloat(h.priceUsd).toFixed(2))
       );
     }
-    
   },
 
   created() {
@@ -160,38 +169,41 @@ export default {
   },
 
   methods: {
-    toggleConverter(){
+    toggleConverter() {
       this.fromUsd = !this.fromUsd;
     },
 
-    getWebSite(exchange){
-      this.$set(exchange, 'isLoading', true );
+    getWebSite(exchange) {
+      this.$set(exchange, "isLoading", true);
 
-      return api.getExchange(exchange.exchangeId)
-      .then(res => {
-        this.$set(exchange, 'url', res.exchangeUrl )
-      }).finally(() => {
-        this.$set(exchange, 'isLoading', false );
-      });
-      
+      return api
+        .getExchange(exchange.exchangeId)
+        .then(res => {
+          this.$set(exchange, "url", res.exchangeUrl);
+        })
+        .finally(() => {
+          this.$set(exchange, "isLoading", false);
+        });
     },
     getCoin() {
       this.isLoading = true;
       const id = this.$route.params.id;
 
-      Promise.all([api.getAsset(id), api.getHistory(id), api.getMarkets(id) ]).then(([asset, history, markets]) => {
-        this.asset = asset;
-        this.history = history;
-        this.markets = markets;
-      }).finally(() => (this.isLoading = false));
+      Promise.all([api.getAsset(id), api.getHistory(id), api.getMarkets(id)])
+        .then(([asset, history, markets]) => {
+          this.asset = asset;
+          this.history = history;
+          this.markets = markets;
+        })
+        .finally(() => (this.isLoading = false));
     }
   }
 };
 </script>
 
 <style scoped>
-  td {  
-    padding: 10px;
-    text-align: center;
-  }
+td {
+  padding: 10px;
+  text-align: center;
+}
 </style>

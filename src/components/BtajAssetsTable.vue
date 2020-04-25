@@ -4,7 +4,9 @@
       <tr class="bg-gray-100 border-b-2 border-gray-400">
         <th></th>
         <th :class="{ up: this.sortOrder === 1, down: this.sortOrder === -1 }">
-          <span class="underline cursor-pointer" @click="changeSortOrder">Ranking</span>
+          <span class="underline cursor-pointer" @click="changeSortOrder"
+            >Ranking</span
+          >
         </th>
         <th>Nombre</th>
         <th>Precio</th>
@@ -40,15 +42,16 @@
           <b>#{{ asset.rank }} </b>
         </td>
         <td>
-          <router-link 
+          <router-link
             class="hover:underline text-green-600"
-            :to="{ name: 'coin-detail', params: { id: asset.id }}">
+            :to="{ name: 'coin-detail', params: { id: asset.id } }"
+          >
             {{ asset.name }}
             <small class="ml-1 text-gray-500">
               {{ asset.symbol }}
             </small>
           </router-link>
-          </td>
+        </td>
         <td>{{ asset.priceUsd | dollar }}</td>
         <td>{{ asset.marketCapUsd | dollar }}</td>
         <td
@@ -71,13 +74,13 @@
 </template>
 
 <script>
-import BtajButton from '@/components/BtajButton'
+import BtajButton from "@/components/BtajButton";
 export default {
   name: "BtajAssetsTable",
   components: { BtajButton },
   methods: {
-    goToCoin(coin){
-      this.$router.push({ name: 'coin-detail', params: { id:coin }})
+    goToCoin(coin) {
+      this.$router.push({ name: "coin-detail", params: { id: coin } });
     },
     changeSortOrder() {
       this.sortOrder = this.sortOrder === 1 ? -1 : 1;
@@ -91,23 +94,27 @@ export default {
   },
   data() {
     return {
-      filter: '',
+      filter: "",
       sortOrder: 1
-    }
+    };
   },
   computed: {
-    filteredAssets(){
+    filteredAssets() {
       const altOrder = this.sortOrder === 1 ? -1 : 1;
 
-      return this.assets.filter( 
-        asset => asset.symbol.toLowerCase().includes(this.filter.toLowerCase()) 
-        || asset.name.toLowerCase().includes(this.filter.toLowerCase())).sort((a, b) => {
-          if( parseInt(a) > parseInt(b)){
+      return this.assets
+        .filter(
+          asset =>
+            asset.symbol.toLowerCase().includes(this.filter.toLowerCase()) ||
+            asset.name.toLowerCase().includes(this.filter.toLowerCase())
+        )
+        .sort((a, b) => {
+          if (parseInt(a) > parseInt(b)) {
             return this.sortOrder;
           }
 
           return altOrder;
-        })
+        });
     }
   }
 };

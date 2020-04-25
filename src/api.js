@@ -15,24 +15,26 @@ function getAsset(coin) {
 function getMarkets(coin) {
   return fetch(`${api}/assets/${coin}/markets?limit=5`)
     .then(res => res.json())
-    .then(res => res.data)
+    .then(res => res.data);
 }
 
 function getExchange(id) {
   return fetch(`${api}/exchanges/${id}`)
     .then(res => res.json())
-    .then(res => res.data)
+    .then(res => res.data);
 }
 
 function getHistory(coin) {
-    const now = new Date();
-    const end = now.getTime();  
-    now.setDate(now.getDate() - 1);
-    const start = now.getTime();
-    return fetch(`${api}/assets/${coin}/history?interval=h1&start=${start}&end=${end}`)
-      .then(result => result.json())
-      .then(result => result.data);
-  }
+  const now = new Date();
+  const end = now.getTime();
+  now.setDate(now.getDate() - 1);
+  const start = now.getTime();
+  return fetch(
+    `${api}/assets/${coin}/history?interval=h1&start=${start}&end=${end}`
+  )
+    .then(result => result.json())
+    .then(result => result.data);
+}
 
 export default {
   getAssets,

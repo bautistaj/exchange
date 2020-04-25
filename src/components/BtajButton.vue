@@ -18,12 +18,12 @@ export default {
       default: false
     }
   },
-  name: 'BtajButton',
+  name: "BtajButton",
 
   methods: {
     buttonClick() {
-      this.$emit('custom-click')
+      this.$emit("custom-click");
     }
-  },
-}
+  }
+};
 </script>
