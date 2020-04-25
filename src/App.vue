@@ -1,16 +1,34 @@
 <template>
   <main id="app">
-    <btaj-header />
+    <btaj-header :links="links"/>
     <router-view class="container px-5 sm:px-20 py-20 flex justify-center" />
   </main>
 </template>
 <script>
-import BtajHeader from '@/components/BtajHeader';
+import BtajHeader from "@/components/BtajHeader";
 
 export default {
   name: "App",
   components: {
     BtajHeader
+  },
+  data() {
+    return {
+      links: [
+        {
+          title:'BTC',
+          to: { name:'coin-detail', params: { id:'bitcoin' } }
+        },
+        {
+          title:'ETH',
+          to: { name:'coin-detail', params: { id:'ethereum' } }
+        },
+        {
+          title:'XRP',
+          to: { name:'coin-detail', params: { id:'ripple' } }
+        }
+      ]
+    }
   }
 };
 </script>
